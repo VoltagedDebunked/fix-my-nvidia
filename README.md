@@ -11,12 +11,12 @@ cd fix-my-nvidia
 
 2. Make the script executable:
 ```bash
-chmod -x script.sh
+chmod +x script.sh
 ```
 
 3. Run:
 ```bash
-sudo ./fix-my-nvidia.sh
+sudo ./script.sh
 ```
 
 Enjoy!
