@@ -9,7 +9,7 @@ detect_distro() {
 	# detect system
     if [ -f /etc/os-release ]; then
         . /etc/os-release
-        echo -e "${WHITE}[i] - Detected system, $ID"
+        echo -e "${WHITE}[i] - Detected system, $ID${RESET}"
     else
         echo -e "${RED}[!] - the system cant detect current system${RESET}"
 	exit 1
