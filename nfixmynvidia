@@ -1,0 +1,202 @@
+#!/bin/bash
+
+# information and colors
+RESET="\e[0m"
+RED="\e[1m\e[91m"
+WHITE="\e[1m\e[97m"
+
+detect_distro() {
+	# detect system
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo -e "${WHITE}[i] - Detected system, $ID"
+    else
+        echo -e "${RED}[!] - the system cant detect current system${RESET}"
+	exit 1
+    fi
+}
+
+update_system() {
+	if [ -z "$1" ]; then
+		echo -e "${RED}[!] - no argument detected${RESET}"
+		exit 1
+	else
+
+    case "$1" in
+        ubuntu|debian)
+            sudo apt update && sudo apt upgrade -y
+            ;;
+        fedora|centos|rhel)
+            sudo dnf upgrade -y
+            ;;
+	old-fedora|old-centos|old-rhel)
+		sudo yum update
+		;;
+	opensuse)
+		sudo zypper update
+		;;
+	gentoo)
+		sudo emerge --sync
+		sudo emerge --update --deep --newuse @world
+		;;
+        arch)
+            sudo pacman -Syu
+            ;;
+	macos)
+		brew update
+		brew upgrade
+		;;
+        *)
+            echo -e "${RED}[!] - unsupported distribution${RESET}"
+            exit 1
+            ;;
+    esac
+	fi
+}
+
+# this is going to install essential packages
+install_build_packages() {
+	if [ -z "$1" ]; then
+		echo -e "${RED}[!] - no argument detected${RESET}"
+		exit 1
+	else
+
+    case "$1" in
+        ubuntu|debian)
+            sudo apt install build-essential linux-headers-$(uname -r) pciutils -y
+            ;;
+        fedora|centos|rhel)
+            sudo dnf install @development-tools kernel-devel pciutils -y
+            ;;
+	old-fedora|old-centos|old-rhel)
+		sudo yum groupinstall "Development Tools" -y
+		sudo yum kernel-headers-$(uname -r) pciutils
+		;;
+	opensuse)
+		sudo zypper install -t pattern devel_basis -y
+		sudo zypper install kernel-devel pciutils -y
+		;;
+	gentoo)
+		sudo emerge @world
+		sudo emerge sys-kernel/linux-headers sys-apps/pciutils
+		;;
+        arch)
+            sudo pacman -S base-devel linux-headers pciutils --noconfirm
+            ;;
+	macos)
+		sudo brew install gcc make pciutils
+		;;
+        *)
+            echo -e "${RED}[!] - unsupported distribution${RESET}"
+            exit 1
+            ;;
+    esac
+	fi
+}
+
+identify_gpu() {
+	# this only searches nvidia
+    lspci | grep -i nvidia
+}
+
+remove_old_drivers() {
+	if [ -z "$1" ]; then
+		echo -e "${RED}[!] - no argument detected${RESET}"
+		exit 1
+	else
+
+    case "$1" in
+        ubuntu|debian)
+            sudo apt remove --purge '^nvidia-.*' '^libnvidia-.*' '^xserver-xorg-video-nouveau' -y
+            ;;
+        fedora|centos|rhel)
+            sudo dnf remove '*nvidia*' 'xorg-x11-drv-nouveau' -y
+            ;;
+	old-fedora|old-centos|old-rhel)
+		sudo yum remove 'nvidia-*' 'libnvidia-*' 'xorg-x11-drv-nouveau' -y
+		;;
+	opensuse)
+		sudo zypper remove 'nvidia-*' 'libnvidia-*' 'xorg-x11-video-nouveau' -y
+		;;
+	gentoo)
+		sudo emerge --unmerge 'x11-drivers/nvidia-drivers' 'x11-drivers/xf86-video-nouveau' 'x11-drivers/libnvidia-*'
+		;;
+	macos)
+		sudo brew uninstall nvidia libnvidia
+		;;
+        arch)
+            sudo pacman -Rns nvidia nvidia-utils --noconfirm
+            ;;
+        *)
+            echo -e "${RED}[!] - unsupported distribution${RESET}"
+            exit 1
+            ;;
+    esac
+	fi
+}
+
+install_nvidia_drivers() {
+	if [ -z "$1" ]; then
+		echo -e "${RED}[!] - no argument detected${RESET}"
+		exit 1
+	else
+    case "$1" in
+        ubuntu|debian)
+            sudo add-apt-repository ppa:graphics-drivers/ppa -y
+            sudo apt update
+            sudo apt install nvidia-driver-550 -y  
+            ;;
+        fedora|centos|rhel)
+            sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda -y
+            ;;
+	old-fedora|old-centos|old-rhel)
+		sudo yum install https://download.nvidia.com/centos/8/nvidia-driver.repo
+		sudo yum install nvidia-driver-550 -y
+		;;
+	opensuse)
+		sudo zypper addrepo --refresh https://download.nvidia.com/opensuse/leap/15.2 nvidia
+		sudo zypper install x11-video-nvidiaG550 -y
+		;;
+	gentoo)
+		sudo emerge --ask x11-drivers/nvidia-drivers:550
+		sudo emerge -av nvidia-drivers
+		;;
+        arch)
+            sudo pacman -S nvidia nvidia-utils --noconfirm
+            ;;
+	macos)
+		sudo brew install nvidia-cuda-toolkit
+		;;
+        *)
+            echo -e "${RED}[!] - unsupported distribution${RESET}"
+            exit 1
+            ;;
+    esac
+	fi
+}
+
+# generates Xorg configuration
+configure_xorg() {
+    sudo nvidia-xconfig
+}
+
+echo -e "${WHITE}[i] - updating system${RESET}"
+update_system "$1"
+
+echo -e "${WHITE}[i] - installing build packages${RESET}"
+install_build_packages "$1"
+
+echo -e "${WHITE}[i] - indentifying GPU${RESET}" 
+identify_gpu
+
+echo -e "${WHITE}[i] - removing old drivers${RESET}"
+remove_old_drivers "$1"
+
+echo -e "${WHITE}[i] - installing nvidia drivers${RESET}"
+install_nvidia_drivers "$1"
+
+echo -e "${WHITE}[i] - configuring xorg${RESET}"
+configure_xorg
+
+echo -e "${WHITE}[i] - rebooting system${RESET}"
+sudo reboot
