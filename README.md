@@ -12,12 +12,12 @@ cd neo-fix-my-nvidia
 make the script executable
 
 ```bash
-chmod +x neofixmynvidia
+chmod +x nfixmynvidia
 ```
 
 run the script and pass in the argument of your distro
 
 ```bash
-./neofixmynvidia ubuntu
+./nfixmynvidia ubuntu
 ```
 
