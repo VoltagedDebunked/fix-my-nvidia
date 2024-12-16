@@ -9,15 +9,28 @@ git clone https://github.com/The-Terminal-Community/neo-fix-my-nvidia.git
 cd neo-fix-my-nvidia
 ```
 
-make the script executable
+install with make
 
 ```bash
-chmod +x nfixmynvidia
+sudo make install
 ```
 
-run the script and pass in the argument of your distro
+run with
 
 ```bash
-./nfixmynvidia ubuntu
+nfixmynvidia <distro>
 ```
 
+replace `<distro>` with your OS or linux distribution
+
+read the documentation with
+
+```bash
+man nfixmynvidia
+```
+
+uninstall with
+
+```bash
+sudo make uninstall
+```
