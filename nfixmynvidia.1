@@ -1,0 +1,114 @@
+.TH NFIXMYNVIDIA 1 "December 2024" "v1" "User Commands"
+
+.SH NAME
+Neo-fix-my-nvidia - An improved version from the original fix-my-nvidia program
+
+.SH SYNOPSIS
+.B nfixmynvidia 
+[\fIdistro\fR]
+
+.SH DESCRIPTION
+nfixmynvidia is a tool designed to fix NVIDIA drivers for MacOS or Linux. NVIDIA can sometimes be poor on MacOS and Linux, so nfixmynvidia fixes this issue.
+
+.SH OPTIONS
+
+.TP
+.B macos
+For MacOS.
+
+.TP
+.B debian
+For Debian, and Debian based linux distributions.
+
+.TP
+.B ubuntu
+For Ubuntu, and Ubuntu based distributions.
+
+.TP
+.B fedora
+For Fedora, and Fedora based distributions.
+
+.TP
+.B centos
+For CentOS, and CentOS based distributions.
+
+.TP
+.B rhel
+For RHEL (Red Hat Enterprise Linux), and RHEL based distributions.
+
+.TP
+.B old-fedora
+For older versions of Fedora (and Fedora based distributions), that may use the yum package manager.
+
+.TP
+.B old-centos
+For older versions of CentOS (and CentOS based distributions), that may use the yum package manager.
+
+.TP
+.B old-rhel
+For older versions of RHEL (and RHEL based distributions), that may use the yum package manager.
+
+.TP
+.B opensuse
+For OpenSUSE (Leap), and OpenSUSE (Leap) based distributions.
+
+.TP
+.B gentoo
+For Gentoo, and Gentoo based distributions.
+
+.TP
+.B arch
+For Arch Linux, and Arch Linux based distributions.
+
+.TP
+.B What if my operating system is something else?
+Check what your operating system is based on. If your linux distribution is not based on anything above, and not from the list above, your operating system may not be supported.
+
+.SH INSTALLATION
+To install neo-fix-my-nvidia,
+
+1. Clone the repository
+
+.B git clone https://github.com/The-Terminal-Community/neo-fix-my-nvidia.git
+
+.B cd neo-fix-my-nvidia
+
+2. Install with make
+
+.B sudo make install
+
+3. Done!
+
+.SH EXIT STATUS
+.B 0
+NVIDIA driver fix was successful.
+
+.B 1
+An error occurred.
+
+
+.SH FILES
+
+.TP
+.B /bin/nfixmynvidia, /usr/bin/nfixmynvidia, /usr/local/bin/nfixmynvidia
+The main executable.
+
+.TP
+.B /usr/share/man/man1/nfixmynvidia.tar.gz
+This man page.
+
+.SH SEE ALSO
+.B libnvidia-*(1),
+.B nvidia-*(2)
+
+.SH AUTHOR
+Written by Aronas
+
+.SH LICENSE
+neo-fix-my-nvidia is licensed under the Apache License 2.0.
+
+.SH COPYRIGHT
+Copyright (C) neo-fix-my-nvidia 2024. All rights reserved
+
+
+
