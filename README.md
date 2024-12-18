@@ -1,22 +1,38 @@
-# fix-my-nvidia
-Nvidia drivers suck on linux. so this fixes em.
+# neo-fix-my-nvidia
+a fork of fix-my-nvidia with modern improvements
 
-## How to use
+## installation
+clone the git repository
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/voltageddebunked/fix-my-nvidia.git
-cd fix-my-nvidia
+git clone https://github.com/The-Terminal-Community/neo-fix-my-nvidia.git
+cd neo-fix-my-nvidia
 ```
 
-2. Make the script executable:
+install with make
+
+```bash
+sudo make install
+```
+
+run with
+
 ```bash
 chmod +x script.sh
+nfixmynvidia <distro>
 ```
 
-3. Run:
+replace `<distro>` with your OS or linux distribution
+
+read the documentation with
+
 ```bash
 sudo ./script.sh
+man nfixmynvidia
 ```
 
-Enjoy!
+uninstall with
+
+```bash
+sudo make uninstall
+```
