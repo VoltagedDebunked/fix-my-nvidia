@@ -18,6 +18,7 @@ sudo make install
 run with
 
 ```bash
+chmod +x script.sh
 nfixmynvidia <distro>
 ```
 
@@ -26,6 +27,7 @@ replace `<distro>` with your OS or linux distribution
 read the documentation with
 
 ```bash
+sudo ./script.sh
 man nfixmynvidia
 ```
 
